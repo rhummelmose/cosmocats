@@ -1,50 +1,94 @@
 import React from 'react';
-import { Stack, Text, Link, FontWeights } from 'office-ui-fabric-react';
+import { Stack, Text, Button } from 'office-ui-fabric-react';
+import CatsDatabase from "./CatsDatabase";
 
-import logo from './fabric.png';
+export class App extends React.Component<{}, { cats: JSX.Element[] }> {
 
-const boldStyle = {
-  root: { fontWeight: FontWeights.semibold }
-};
+    private readonly databaseEndpoint = process.env["COSMOCATS_COSMOSDB_ENDPOINT"] != undefined ? process.env["COSMOCATS_COSMOSDB_ENDPOINT"] : window._env_.COSMOCATS_COSMOSDB_ENDPOINT;
+    private readonly databaseKey = process.env["COSMOCATS_COSMOSDB_KEY"] != undefined ? process.env["COSMOCATS_COSMOSDB_KEY"] : window._env_.COSMOCATS_COSMOSDB_KEY;
 
-export const App: React.FunctionComponent = () => {
-  return (
-    <Stack
-      horizontalAlign="center"
-      verticalAlign="center"
-      verticalFill
-      styles={{
-        root: {
-          width: '960px',
-          margin: '0 auto',
-          textAlign: 'center',
-          color: '#605e5c'
-        }
-      }}
-      gap={15}
-    >
-      <img src={logo} alt="logo" />
-      <Text variant="xxLarge" styles={boldStyle}>
-        Welcome to Your UI Fabric App
-      </Text>
-      <Text variant="large">For a guide on how to customize this project, check out the UI Fabric documentation.</Text>
-      <Text variant="large" styles={boldStyle}>
-        Essential Links
-      </Text>
-      <Stack horizontal gap={15} horizontalAlign="center">
-        <Link href="https://developer.microsoft.com/en-us/fabric">Docs</Link>
-        <Link href="https://stackoverflow.com/questions/tagged/office-ui-fabric">Stack Overflow</Link>
-        <Link href="https://github.com/officeDev/office-ui-fabric-react/">Github</Link>
-        <Link href="https://twitter.com/officeuifabric">Twitter</Link>
-      </Stack>
-      <Text variant="large" styles={boldStyle}>
-        Design System
-      </Text>
-      <Stack horizontal gap={15} horizontalAlign="center">
-        <Link href="https://developer.microsoft.com/en-us/fabric#/styles/icons">Icons</Link>
-        <Link href="https://developer.microsoft.com/en-us/fabric#/styles/typography">Typography</Link>
-        <Link href="https://developer.microsoft.com/en-us/fabric#/styles/themegenerator">Theme</Link>
-      </Stack>
-    </Stack>
-  );
-};
+    catsDatabase: CatsDatabase | null = null;
+    cats: JSX.Element[] = [];
+
+    constructor(props: Readonly<{}>) {
+        super(props);
+        this.state = { cats: [] }
+      }
+
+    async componentDidMount() {
+        this.catsDatabase = new CatsDatabase(this.databaseEndpoint!, this.databaseKey!);
+        await this.catsDatabase.bootstrap();
+        this.refreshCatImages();
+    }
+
+    async refreshCatImages() {
+        const allCats = await this.catsDatabase!.allCats();
+        const allCatImages = allCats.map(cat => {
+            return <img key={cat.id} src={cat.url} />
+        });
+        this.setState({cats: allCatImages});
+    }
+
+    async _alertClicked() {
+        console.log("I was clicked");
+        await this.catsDatabase!.addCat();
+        this.refreshCatImages();
+    }
+
+    render() {
+        return (
+            <div style={{width:"100%", height:"100%"}}>
+                <Stack
+                    horizontalAlign="center"
+                    styles={{
+                        root: {
+                            margin: '0 auto',
+                            textAlign: 'center',
+                            color: '#605e5c'
+                        }
+                    }}
+                    gap={15}
+                >
+                    <div style={{width:"100%", height:"150px", backgroundColor:"#003350"}}>
+                        <Text variant="mega" styles={{root: {textTransform:"uppercase", lineHeight:"135px", color:"#FFF"}}}>Cosmocats</Text>
+                    </div>
+                    <div style={{width:"100%", height:"80px", margin:"0"}}>
+                        <Text variant="xLarge" styles={{root: {textTransform: "uppercase", lineHeight: "80px"}}}># of cats: {this.state.cats.length}</Text>
+                    </div>
+                </Stack>
+                <Stack
+                    horizontalAlign="center"
+                    styles={{
+                        root: {
+                            margin: '0 auto',
+                            textAlign: 'center',
+                            color: '#605e5c',
+                            width: "100%",
+                            position: "fixed",
+                            bottom: "0",
+                            height: "calc(100% - 150px - 80px);"
+                        }
+                    }}
+                    gap={15}
+                    reversed
+                >
+                    <Button onClick={this._alertClicked.bind(this)}
+                        style={{margin: "0", width: "100%", backgroundColor: "#007b26", border: "0", padding: "40px", fontSize: "25px", color: "#FFF", textTransform: "uppercase"}}>
+                            Add cat!
+                    </Button>
+                    <Stack horizontal styles={{
+                        root: {
+                            overflowX: "scroll",
+                            overflowY: "hidden",
+                            width: "100%",
+                            backgroundColor: "black",
+                            height: "calc(100% - 80px)"
+                        }
+                    }}>
+                        {this.state.cats.length != 0 ? this.state.cats : <Text style={{fontSize: "30px", color: "#FFF", width:"100%", position: "relative", top: "calc(50% - 15px)"}}>No cats :(</Text>}
+                    </Stack>
+                </Stack>
+            </div>
+        );
+    }
+}

@@ -2,6 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
 import { mergeStyles } from 'office-ui-fabric-react';
+import * as dotenv from "dotenv";
+
+declare global {
+  interface Window { _env_: { COSMOCATS_COSMOSDB_ENDPOINT: string, COSMOCATS_COSMOSDB_KEY: string }; }
+}
+
+console.log("Process env: %o", process.env);
+console.log("Window env: %o", window._env_);
 
 // Inject some global styles
 mergeStyles({
@@ -13,5 +21,6 @@ mergeStyles({
     }
   }
 });
+
 
 ReactDOM.render(<App />, document.getElementById('app'));

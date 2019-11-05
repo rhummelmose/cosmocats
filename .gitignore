@@ -2,3 +2,5 @@ node_modules
 lib
 lib-commonjs
 dist
+.env
+.DS_Store
