@@ -1,5 +1,5 @@
-import React from 'react';
-import { Stack, Text, Button } from 'office-ui-fabric-react';
+import React from "react";
+import { Stack, Text, Button } from "office-ui-fabric-react";
 import CatsDatabase from "./CatsDatabase";
 
 export class App extends React.Component<{}, { cats: JSX.Element[] }> {
@@ -13,7 +13,7 @@ export class App extends React.Component<{}, { cats: JSX.Element[] }> {
     constructor(props: Readonly<{}>) {
         super(props);
         this.state = { cats: [] }
-      }
+    }
 
     async componentDidMount() {
         this.catsDatabase = new CatsDatabase(this.databaseEndpoint!, this.databaseKey!);
@@ -35,57 +35,102 @@ export class App extends React.Component<{}, { cats: JSX.Element[] }> {
         this.refreshCatImages();
     }
 
+    private outerDivStyle: React.CSSProperties = {
+        width: "100%",
+        height: "100%",
+    };
+
+    private topStackStyles = {
+        root: {
+            margin: "0 auto",
+            textAlign: "center",
+            color: "#605e5c"
+        }
+    };
+
+    private headerDivStyle: React.CSSProperties = {
+        width:"100%",
+        height:"150px",
+        backgroundColor:"#003350",
+    };
+
+    private headerTextStyles = {
+        root: {
+            textTransform:"uppercase",
+            lineHeight:"135px",
+            color:"#FFF",
+        }
+    };
+
+    private countDivStyle: React.CSSProperties = {
+        width:"100%",
+        height:"80px",
+        margin:"0",
+    };
+
+    private countTextStyles = {
+        root: {
+            textTransform: "uppercase",
+            lineHeight: "80px"
+        }
+    };
+
+    private bottomStackStyle = {
+        root: {
+            margin: "0 auto",
+            textAlign: "center",
+            color: "#605e5c",
+            width: "100%",
+            position: "fixed" as "fixed",
+            bottom: "0",
+            height: "calc(100% - 150px - 80px);",
+        }
+    };
+
+    private addCatButtonStyle: React.CSSProperties = {
+        margin: "0",
+        width: "100%",
+        backgroundColor: "#007b26",
+        border: "0",
+        padding: "40px",
+        fontSize: "25px",
+        color: "#FFF",
+        textTransform: "uppercase",
+    };
+
+    private catsHorizontalStackStyles = {
+        root: {
+            overflowX: "scroll" as "scroll",
+            overflowY: "hidden" as "hidden",
+            width: "100%",
+            backgroundColor: "black",
+            height: "calc(100% - 80px)",
+        }
+    };
+
+    private noCatsTextStyle: React.CSSProperties = {
+        fontSize: "30px",
+        color: "#FFF",
+        width:"100%",
+        position: "relative",
+        top: "calc(50% - 15px)",
+    };
+
     render() {
         return (
-            <div style={{width:"100%", height:"100%"}}>
-                <Stack
-                    horizontalAlign="center"
-                    styles={{
-                        root: {
-                            margin: '0 auto',
-                            textAlign: 'center',
-                            color: '#605e5c'
-                        }
-                    }}
-                    gap={15}
-                >
-                    <div style={{width:"100%", height:"150px", backgroundColor:"#003350"}}>
-                        <Text variant="mega" styles={{root: {textTransform:"uppercase", lineHeight:"135px", color:"#FFF"}}}>Cosmocats</Text>
+            <div style={this.outerDivStyle}>
+                <Stack horizontalAlign="center" styles={this.topStackStyles} gap={15}>
+                    <div style={this.headerDivStyle}>
+                        <Text variant="mega" styles={this.headerTextStyles}>Cosmocats</Text>
                     </div>
-                    <div style={{width:"100%", height:"80px", margin:"0"}}>
-                        <Text variant="xLarge" styles={{root: {textTransform: "uppercase", lineHeight: "80px"}}}># of cats: {this.state.cats.length}</Text>
+                    <div style={this.countDivStyle}>
+                        <Text variant="xLarge" styles={this.countTextStyles}># of cats: {this.state.cats.length}</Text>
                     </div>
                 </Stack>
-                <Stack
-                    horizontalAlign="center"
-                    styles={{
-                        root: {
-                            margin: '0 auto',
-                            textAlign: 'center',
-                            color: '#605e5c',
-                            width: "100%",
-                            position: "fixed",
-                            bottom: "0",
-                            height: "calc(100% - 150px - 80px);"
-                        }
-                    }}
-                    gap={15}
-                    reversed
-                >
-                    <Button onClick={this._alertClicked.bind(this)}
-                        style={{margin: "0", width: "100%", backgroundColor: "#007b26", border: "0", padding: "40px", fontSize: "25px", color: "#FFF", textTransform: "uppercase"}}>
-                            Add cat!
-                    </Button>
-                    <Stack horizontal styles={{
-                        root: {
-                            overflowX: "scroll",
-                            overflowY: "hidden",
-                            width: "100%",
-                            backgroundColor: "black",
-                            height: "calc(100% - 80px)"
-                        }
-                    }}>
-                        {this.state.cats.length != 0 ? this.state.cats : <Text style={{fontSize: "30px", color: "#FFF", width:"100%", position: "relative", top: "calc(50% - 15px)"}}>No cats :(</Text>}
+                <Stack horizontalAlign="center" styles={this.bottomStackStyle} gap={15} reversed>
+                    <Button onClick={this._alertClicked.bind(this)} style={this.addCatButtonStyle}>Add cat!</Button>
+                    <Stack horizontal styles={this.catsHorizontalStackStyles}>
+                        {this.state.cats.length != 0 ? this.state.cats : <Text style={this.noCatsTextStyle}>No cats :(</Text>}
                     </Stack>
                 </Stack>
             </div>
