@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cosmocats-config
+  labels:
+    app: cosmocats
+data:
+  cosmos-db-endpoint: "{COSMOCATS_COSMOSDB_ENDPOINT}"
+  listening-port: "{COSMOCATS_LISTENING_PORT}"

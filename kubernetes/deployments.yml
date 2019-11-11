@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cosmocats-deployment
+  labels:
+    app: cosmocats
+    tier: mixed
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cosmocats
+      tier: mixed
+  template:
+    metadata:
+      labels:
+        app: cosmocats
+        tier: mixed
+    spec:
+      containers:
+      - name: cosmocats
+        image: cloudnativegbb.azurecr.io/cosmocats
+        ports:
+        - containerPort: 80 # {COSMOCATS_LISTENING_PORT}
+        env:
+        - name: COSMOCATS_COSMOSDB_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: cosmocats-config
+              key: cosmos-db-endpoint
+        - name: COSMOCATS_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: cosmocats-config
+              key: listening-port
+        - name: COSMOCATS_COSMOSDB_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cosmocats-secret
+              key: cosmos-db-key
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: cosmocats-ingress
+  labels:
+    app: cosmocats
+    tier: mixed
+spec:
+  rules:
+  - host: cosmocats.k8s.gbbcloudnative.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: cosmocats-service
+          servicePort: 80 # {COSMOCATS_LISTENING_PORT}
