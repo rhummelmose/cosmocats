@@ -1,9 +1,8 @@
 import { CosmosClient, DatabaseResponse, DatabaseAccount, Database, Container, CosmosClientOptions } from "@azure/cosmos"
 
-import { HttpStatusCode, HttpStatusCodeGetRandom } from "./HttpStatusCode";
 import Cat from "./Cat";
 
-class CatsDatabase {
+export default class CatsDatabase {
 
     private client: CosmosClient;
     private database: Database | null;
@@ -37,19 +36,11 @@ class CatsDatabase {
         return cats;
     }
 
-    async addCat() {
-        let catURL = this.getCatURL();
-        let itemResponse = await this.container!.items.create({url: catURL})
+    async addCatWithURL(url: string): Promise<Cat> {
+        let itemResponse = await this.container!.items.create({url: url})
         let item = itemResponse.item;
         console.log("Added item: %o", item);
-    }
-
-    private getCatURL (): string {
-        const myRandomValue = HttpStatusCodeGetRandom();
-        let catURL = "https://http.cat/" + myRandomValue + ".jpg";
-        return catURL;
+        return new Cat(item.id, item.url)
     }
 
 }
-
-export default CatsDatabase;

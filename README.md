@@ -1,7 +1,7 @@
 # COSMOCATS
 🐈🐈🐈
 ## Instructions
-Provision a Cosmos DB, set its CORS setting to "*" and:
+Provision a Cosmos DB and:
 ```console
 cat@cosmos:~$ git clone https://github.com/rhummelmose/cosmocats.git
 cat@cosmos:~$ cd cosmocats

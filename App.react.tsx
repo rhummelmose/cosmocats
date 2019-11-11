@@ -1,13 +1,8 @@
-import React from "react";
-import { Stack, Text, Button } from "office-ui-fabric-react";
-import CatsDatabase from "./CatsDatabase";
+import * as React from "react";
+import { Stack, Text, Button, DefaultButton } from "office-ui-fabric-react";
 
-export class App extends React.Component<{}, { cats: JSX.Element[] }> {
+export default class App extends React.Component<{}, { cats: JSX.Element[] }> {
 
-    private readonly databaseEndpoint = process.env["COSMOCATS_COSMOSDB_ENDPOINT"] != undefined ? process.env["COSMOCATS_COSMOSDB_ENDPOINT"] : window._env_.COSMOCATS_COSMOSDB_ENDPOINT;
-    private readonly databaseKey = process.env["COSMOCATS_COSMOSDB_KEY"] != undefined ? process.env["COSMOCATS_COSMOSDB_KEY"] : window._env_.COSMOCATS_COSMOSDB_KEY;
-
-    catsDatabase: CatsDatabase | null = null;
     cats: JSX.Element[] = [];
 
     constructor(props: Readonly<{}>) {
@@ -16,22 +11,22 @@ export class App extends React.Component<{}, { cats: JSX.Element[] }> {
     }
 
     async componentDidMount() {
-        this.catsDatabase = new CatsDatabase(this.databaseEndpoint!, this.databaseKey!);
-        await this.catsDatabase.bootstrap();
         this.refreshCatImages();
     }
 
     async refreshCatImages() {
-        const allCats = await this.catsDatabase!.allCats();
+        const response = await fetch("/cats");
+        const allCats = await response.json();
         const allCatImages = allCats.map(cat => {
             return <img key={cat.id} src={cat.url} />
         });
         this.setState({cats: allCatImages});
     }
 
-    async _alertClicked() {
+    async _buttonAddCatClicked() {
         console.log("I was clicked");
-        await this.catsDatabase!.addCat();
+        let response = await fetch("/cats", { method: "POST" });
+        console.log("Add cat response: %o", response);
         this.refreshCatImages();
     }
 
@@ -128,7 +123,7 @@ export class App extends React.Component<{}, { cats: JSX.Element[] }> {
                     </div>
                 </Stack>
                 <Stack horizontalAlign="center" styles={this.bottomStackStyle} gap={15} reversed>
-                    <Button onClick={this._alertClicked.bind(this)} style={this.addCatButtonStyle}>Add cat!</Button>
+                    <DefaultButton onClick={this._buttonAddCatClicked.bind(this)} style={this.addCatButtonStyle}>Add cat!</DefaultButton>
                     <Stack horizontal styles={this.catsHorizontalStackStyles}>
                         {this.state.cats.length != 0 ? this.state.cats : <Text style={this.noCatsTextStyle}>No cats :(</Text>}
                     </Stack>

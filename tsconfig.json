@@ -1,16 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "jsx": "react",
-    "declaration": true,
-    "outDir": "./lib",
-    "strict": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "typeRoots": ["node_modules/@types", "node_modules/just-stack-react/node_modules/@types"],
-    "inlineSourceMap": true
-  },
-
-  "include": ["src", "typings/*.d.ts"]
+    "compilerOptions": {
+        "jsx": "react",
+        "sourceMap": true,
+        "outDir": "./dist"
+    }
 }
