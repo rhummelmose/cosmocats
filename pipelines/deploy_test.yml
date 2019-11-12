@@ -1,0 +1,17 @@
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+- group: cosmocats
+- group: deployment-configuration
+- name: AZDEV_BUILD_SOURCE_VERSION
+  value: $(Build.SourceVersion)
+
+stages:
+- stage: Deploy
+  displayName: Deploy to K8s
+  jobs:
+  - template: templates/deploy.yml
