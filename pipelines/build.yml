@@ -42,6 +42,6 @@ stages:
     - task: AzureCLI@2
       displayName: Azure CLI
       inputs:
-        azureSubscription: $(arm-service-connection-rh-subcription-vse-950dkk)
+        azureSubscription: arm-service-connection-rh-subcription-vse-950dkk
         scriptType: bash
         scriptPath: scripts/deploy.sh
