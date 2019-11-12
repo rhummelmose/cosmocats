@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: cosmocats
-        image: cloudnativegbb.azurecr.io/cosmocats
+        image: gbbcloudnative.azurecr.io/cosmocats
         ports:
         - containerPort: 80 # {COSMOCATS_LISTENING_PORT}
         env:
