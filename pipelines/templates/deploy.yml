@@ -1,0 +1,17 @@
+- job: Deploy
+  displayName: Deploy to K8s
+  pool:
+    vmImage: "ubuntu-latest"
+  steps:
+  - task: Bash@3
+    inputs:
+      filePath: "scripts/tokenize.sh"
+    env:
+      COSMOCATS_COSMOSDB_KEY: $(COSMOCATS_COSMOSDB_KEY)
+  - task: AzureCLI@2
+    displayName: Azure CLI
+    inputs:
+      azureSubscription: arm-service-connection-rh-subcription-vse-950dkk
+      scriptType: bash
+      scriptPath: scripts/deploy_multiple.sh
+      scriptArguments: COSMOCATS_DEPLOYMENT_TARGETS
