@@ -2,6 +2,9 @@
 
 deployment_targets="$1"
 
-# Get deployment targets
+# Print argument
 printf "DEPLOYMENT TARGETS:\n"
 printf "%s\n" $deployment_targets
+
+# Get deployment targets
+printf "%s" $deployment_targets | jq .
