@@ -6,7 +6,7 @@ jobs:
   steps:
   - task: Bash@3
     inputs:
-      filePath: "scripts/tokenize.sh"
+      filePath: scripts/tokenize.sh
     env:
       COSMOCATS_COSMOSDB_KEY: $(COSMOCATS_COSMOSDB_KEY)
   - task: AzureCLI@2

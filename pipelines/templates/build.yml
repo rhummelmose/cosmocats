@@ -1,14 +1,14 @@
 jobs:
 - job: BuildPush
-    displayName: Build and push image
-    pool:
-      vmImage: "ubuntu-latest"
-    steps:
-    - task: Docker@2
-      displayName: Build and Push
-      inputs:
-        command: buildAndPush
-        containerRegistry: acr-service-connection-rh-gbb-cloud-native
-        repository: cosmocats
-        tags: |
-          $(AZDEV_BUILD_SOURCE_VERSION)
+  displayName: Build and push image
+  pool:
+    vmImage: "ubuntu-latest"
+  steps:
+  - task: Docker@2
+    displayName: Build and Push
+    inputs:
+      command: buildAndPush
+      containerRegistry: acr-service-connection-rh-gbb-cloud-native
+      repository: cosmocats
+      tags: |
+        $(AZDEV_BUILD_SOURCE_VERSION)
