@@ -19,6 +19,10 @@ if [ -z "$namespace" ]; then
     exit 1
 fi
 
+# Ensure portability
+echo "Ensure portability.."
+deploy_sh_script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 # Authenticate with the cluster 
 az aks get-credentials --resource-group $resource_group --name $cluster_name --admin
 
@@ -26,8 +30,8 @@ az aks get-credentials --resource-group $resource_group --name $cluster_name --a
 kubectl config set-context --current --namespace=$namespace
 
 # Deploy
-kubectl apply -f kubernetes/configmaps.yml
-kubectl apply -f kubernetes/secrets.yml
-kubectl apply -f kubernetes/deployments.yml
-kubectl apply -f kubernetes/services.yml
-kubectl apply -f kubernetes/ingresses.yml
+kubectl apply -f "${deploy_sh_script_path}/../kubernetes/configmaps.yml"
+kubectl apply -f "${deploy_sh_script_path}/../kubernetes/secrets.yml"
+kubectl apply -f "${deploy_sh_script_path}/../kubernetes/deployments.yml"
+kubectl apply -f "${deploy_sh_script_path}/../kubernetes/services.yml"
+kubectl apply -f "${deploy_sh_script_path}/../kubernetes/ingresses.yml"
