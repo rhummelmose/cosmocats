@@ -1,3 +1,4 @@
+jobs:
 - job: BuildPush
     displayName: Build and push image
     pool:

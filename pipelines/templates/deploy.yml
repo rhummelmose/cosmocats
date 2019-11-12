@@ -1,3 +1,4 @@
+jobs:
 - job: Deploy
   displayName: Deploy to K8s
   pool:
