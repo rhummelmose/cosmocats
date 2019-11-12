@@ -15,4 +15,4 @@ jobs:
       azureSubscription: arm-service-connection-rh-subcription-vse-950dkk
       scriptType: bash
       scriptPath: scripts/deploy_multiple.sh
-      scriptArguments: COSMOCATS_DEPLOYMENT_TARGETS
+      scriptArguments: $(COSMOCATS_DEPLOYMENT_TARGETS)
