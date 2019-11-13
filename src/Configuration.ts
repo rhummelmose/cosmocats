@@ -28,12 +28,13 @@ export default class Configuration {
 
     static configurationFromFileSystem(): Configuration {
         const configuration = new Configuration();
-        const listeningPortString = FileSystem.readFileSync(this.keyListeningPort, "utf8");
-        if (listeningPortString != null && listeningPortString.length > 0) {
+        const listeningPortConfPath = process.env[this.keyListeningPort];
+        if (listeningPortConfPath != null) {
+            const listeningPortString = FileSystem.readFileSync(listeningPortConfPath, "utf8");
             configuration.listeningPort = Number(listeningPortString)
         }
-        configuration.cosmosEndpoint = FileSystem.readFileSync(this.keyCosmosEndpoint, "utf8");
-        configuration.cosmosKey = FileSystem.readFileSync(this.keyCosmosKey, "utf8");
+        configuration.cosmosEndpoint = FileSystem.readFileSync(process.env[this.keyCosmosEndpoint], "utf8");
+        configuration.cosmosKey = FileSystem.readFileSync(process.env[this.keyCosmosKey], "utf8");
         return configuration;
     }
 
