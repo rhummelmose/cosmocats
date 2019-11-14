@@ -3,7 +3,6 @@
 # Get arguments
 resource_group=$1
 cluster_name=$2
-namespace=$3
 
 # Verify arguments
 if [ -z "$resource_group" ]; then
@@ -14,10 +13,6 @@ if [ -z "$cluster_name" ]; then
     echo "Cluster name required as 2nd argument.."
     exit 1
 fi
-if [ -z "$namespace" ]; then
-    echo "Namespace required as 3rd argument.."
-    exit 1
-fi
 
 # Ensure portability
 echo "Ensure portability.."
@@ -25,9 +20,6 @@ deploy_sh_script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 
 
 # Authenticate with the cluster 
 az aks get-credentials --resource-group $resource_group --name $cluster_name --admin
-
-# Change namespace
-kubectl config set-context --current --namespace=$namespace
 
 # Deploy
 kubectl apply -f "${deploy_sh_script_path}/../kubernetes/configmaps.yml"

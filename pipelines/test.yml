@@ -1,0 +1,21 @@
+trigger:
+- master
+
+resources:
+- repositories:
+  - repository: self
+  - repository: aks-commander
+    type: github
+    name: rhummelmose/aks-commander
+
+stages:
+- stage: Test
+  displayName: Test
+  jobs:
+  - job: Test
+    displayName: Test
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+    - script: pwd && ls -la /
+      displayName: ls -la
