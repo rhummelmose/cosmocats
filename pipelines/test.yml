@@ -3,7 +3,6 @@ trigger:
 
 resources:
 - repositories:
-  - repository: self
   - repository: aks-commander
     type: github
     name: rhummelmose/aks-commander
