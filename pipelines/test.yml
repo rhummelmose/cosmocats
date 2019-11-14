@@ -7,16 +7,13 @@ resources:
 stages:
 - stage: Test
   displayName: Test
-  resources:
-  - repositories:
-    - repository: aks-commander
-      type: github
-      name: rhummelmose/aks-commander
   jobs:
   - job: Test
     displayName: Test
     pool:
       vmImage: "ubuntu-latest"
     steps:
-    - script: pwd && ls -la /
-      displayName: ls -la
+    - checkout: self
+    - checkout: github://rhummelmose/aks-commander
+    - script: pwd && ls -la / && ls -la . && ls -la ../
+      displayName: sesame
