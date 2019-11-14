@@ -1,8 +1,8 @@
-trigger:
-- master
-
 resources:
-- repo: self
+  repositories:
+  - repository: aks-commander
+    type: github
+    name: rhummelmose/aks-commander
 
 stages:
 - stage: Test
@@ -14,6 +14,6 @@ stages:
       vmImage: "ubuntu-latest"
     steps:
     - checkout: self
-    - checkout: github://rhummelmose/aks-commander
+    - checkout: aks-commander
     - script: pwd && ls -la / && ls -la . && ls -la ../
       displayName: sesame
