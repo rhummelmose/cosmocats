@@ -2,10 +2,7 @@ trigger:
 - master
 
 resources:
-- repositories:
-  - repository: aks-commander
-    type: github
-    name: rhummelmose/aks-commander
+- repo: self
 
 stages:
 - stage: Test
@@ -15,6 +12,11 @@ stages:
     displayName: Test
     pool:
       vmImage: "ubuntu-latest"
+    resources:
+    - repositories:
+      - repository: aks-commander
+        type: github
+        name: rhummelmose/aks-commander
     steps:
     - script: pwd && ls -la /
       displayName: ls -la
