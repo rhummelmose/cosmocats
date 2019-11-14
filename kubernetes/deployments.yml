@@ -23,6 +23,8 @@ spec:
         ports:
         - containerPort: 80 # {COSMOCATS_LISTENING_PORT}
         env:
+        - name: COSMOCATS_CONFIGURATION_TYPE
+          value: ENV
         - name: COSMOCATS_COSMOSDB_ENDPOINT
           valueFrom:
             configMapKeyRef:
