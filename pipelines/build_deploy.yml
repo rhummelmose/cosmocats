@@ -14,6 +14,11 @@ resources:
         - README.md
         - .gitignore
         - vscode-defaults
+  - repository: aks-commander
+    type: github
+    name: rhummelmose/aks-commander
+    endpoint: rhummelmose
+    trigger: none
 
 variables:
 - group: cosmocats
@@ -43,7 +48,7 @@ stages:
     pool:
       vmImage: "ubuntu-latest"
     steps:
+    - checkout: self
+    - checkout: aks-commander
     - template: templates/tokenize.yml
-      workingDirectory: ".."
     - template: templates/deploy.yml
-      workingDirectory: ".."
