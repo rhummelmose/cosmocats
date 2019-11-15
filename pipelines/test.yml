@@ -17,6 +17,13 @@ stages:
     steps:
     - checkout: self
     - checkout: aks-commander
-    - script: pwd && ls -la / && ls -la . && ls -la ../
-    - script: echo $BUILD_REPOSITORY_URI
-      displayName: sesame
+    - task: AzureCLI@2
+      displayName: Azure CLI
+      inputs:
+        azureSubscription: arm-service-connection-rh-subcription-vse-950dkk
+        addSpnToEnvironment: true
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+            deployment_targets=$(bash aks-commander/scripts/deployment_targets_for_application.sh "$BUILD_REPOSITORY_URI")
+            bash cosmocats/scripts/deploy_multiple.sh "$deployment_targets"

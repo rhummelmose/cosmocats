@@ -18,7 +18,7 @@ printf "%s\n" $deployment_targets
 
 # Deploy to all targets
 echo $deployment_targets | jq -r '.[] | [ ."resource-group", ."cluster-name" ] | @tsv' | 
-    while IFS=$'\t' read -r resource_group cluster_name namespace; do
+    while IFS=$'\t' read -r resource_group cluster_name; do
         echo "Deploying to cluster: (resource group: ${resource_group}, name: ${cluster_name})"
-        bash "${deploy_multiple_sh_script_path}/deploy.sh" "$resource_group" "$cluster_name"
+        #bash "${deploy_multiple_sh_script_path}/deploy.sh" "$resource_group" "$cluster_name"
     done
