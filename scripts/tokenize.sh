@@ -66,7 +66,7 @@ yq w --inplace "${tokenize_sh_script_path}/../kubernetes/secrets.yml" "data.cosm
 image_name=$(yq r "${tokenize_sh_script_path}/../kubernetes/deployments.yml" "spec.template.spec.containers[0].image")
 image_tag=$BUILD_SOURCEVERSION
 if [ ! -z $AZDEV_DEPLOYMENT_IMAGE_TAG ]; then
-    image_name=$AZDEV_DEPLOYMENT_IMAGE_TAG
+    image_tag=$AZDEV_DEPLOYMENT_IMAGE_TAG
 fi
 container_image="${image_name}:${image_tag}"
 label_source_version="source_version"
