@@ -2,9 +2,9 @@ resources:
   repositories:
   - repository: self
   - repository: aks-commander
-  type: github
-  name: rhummelmose/aks-commander
-  endpoint: rhummelmose
+    type: github
+    name: rhummelmose/aks-commander
+    endpoint: rhummelmose
 
 variables:
 - group: cosmocats
