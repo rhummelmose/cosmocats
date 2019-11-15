@@ -43,5 +43,6 @@ stages:
     pool:
       vmImage: "ubuntu-latest"
     steps:
+    - checkout: self
     - template: templates/tokenize.yml
     - template: templates/deploy.yml
