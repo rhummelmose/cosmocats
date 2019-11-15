@@ -43,7 +43,7 @@ stages:
     pool:
       vmImage: "ubuntu-latest"
     steps:
-    - checkout: self
-      path: cosmocats
     - template: templates/tokenize.yml
+      workingDirectory: ".."
     - template: templates/deploy.yml
+      workingDirectory: ".."
