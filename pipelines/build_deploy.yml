@@ -1,20 +1,19 @@
-# specific path build
-trigger:
-  branches:
-    include:
-    - master
-  paths:
-    include:
-    - /*
-    exclude:
-    - pipelines/*
-    - scripts/*
-    - README.md
-    - .gitignore
-    - vscode-defaults
-
 resources:
-- repo: self
+  repositories:
+  - repository: self
+    trigger:
+      branches:
+        include:
+        - master
+      paths:
+        include:
+        - /*
+        exclude:
+        - pipelines/*
+        - scripts/*
+        - README.md
+        - .gitignore
+        - vscode-defaults
 
 variables:
 - group: cosmocats
