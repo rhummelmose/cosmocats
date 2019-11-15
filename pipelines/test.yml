@@ -18,4 +18,5 @@ stages:
     - checkout: self
     - checkout: aks-commander
     - script: pwd && ls -la / && ls -la . && ls -la ../
+    - script: echo $BUILD_REPOSITORY_URI
       displayName: sesame
