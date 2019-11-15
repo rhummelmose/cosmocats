@@ -22,8 +22,4 @@ deploy_sh_script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 
 az aks get-credentials --resource-group $resource_group --name $cluster_name --admin
 
 # Deploy
-kubectl apply -f "${deploy_sh_script_path}/../kubernetes/configmaps.yml"
-kubectl apply -f "${deploy_sh_script_path}/../kubernetes/secrets.yml"
-kubectl apply -f "${deploy_sh_script_path}/../kubernetes/deployments.yml"
-kubectl apply -f "${deploy_sh_script_path}/../kubernetes/services.yml"
-kubectl apply -f "${deploy_sh_script_path}/../kubernetes/ingresses.yml"
+kubectl apply -f "${deploy_sh_script_path}/../kubernetes"

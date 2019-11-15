@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# Debugging
-if [ ! -z $TOKENIZE_DEBUG ]; then
-    echo "Setting debugging variables.."
-    COSMOCATS_LISTENING_PORT=debug_listening_port
-    COSMOCATS_COSMOSDB_ENDPOINT=debug_cosmosdb_endpoint
-    COSMOCATS_COSMOSDB_KEY=debug_cosmosdb_key
-fi
-
 # Validate required variables
 if [ -z $COSMOCATS_LISTENING_PORT ] || \
    [ -z $COSMOCATS_COSMOSDB_ENDPOINT ] || \
@@ -36,7 +28,6 @@ install_prereqs() {
         sudo snap install yq
     fi
 }
-
 install_prereqs
 
 # Quote/escape functions for sed
@@ -51,7 +42,6 @@ quoteSubst() {
 
 # Template SED
 # sed -i '' s/$(quoteRe "$key")/$(quoteSubst "$value")/g file.ext
-
 # Template YQ
 # yq w --inplace file.ext path.to.thing "$value"
 

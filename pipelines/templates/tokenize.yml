@@ -1,0 +1,7 @@
+steps:
+- task: Bash@3
+  displayName: Tokenize kubernetes manifests
+  inputs:
+    filePath: cosmocats/scripts/tokenize.sh
+  env:
+    COSMOCATS_COSMOSDB_KEY: $(COSMOCATS_COSMOSDB_KEY)

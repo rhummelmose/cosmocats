@@ -1,0 +1,33 @@
+resources:
+  repositories:
+  - repository: self
+  - repository: aks-commander
+  type: github
+  name: rhummelmose/aks-commander
+  endpoint: rhummelmose
+
+variables:
+- group: cosmocats
+
+stages:
+- stage: stage_deploy_latest
+  displayName: Deploy latest
+  jobs:
+  - job: job_deploy_latest
+    displayName: Deploy latest
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+    - checkout: self
+    - checkout: aks-commander
+    - task: AzureCLI@2
+      displayName: Get latest cosmocats image tag
+      inputs:
+        azureSubscription: arm-service-connection-rh-subcription-vse-950dkk
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          latest_image_tag=$(az acr repository show-tags --name gbbcloudnative --repository cosmocats --orderby time_desc --top 1 --output tsv)
+          echo "##vso[task.setvariable variable=AZDEV_DEPLOYMENT_IMAGE_TAG]${latest_image_tag}"
+    - template: templates/tokenize.yml
+    - template: templates/deploy.yml

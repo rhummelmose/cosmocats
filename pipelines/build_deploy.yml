@@ -6,16 +6,31 @@ resources:
 
 variables:
 - group: cosmocats
-- group: deployment-configuration
-- name: AZDEV_BUILD_SOURCE_VERSION
-  value: $(Build.SourceVersion)
 
 stages:
-- stage: BuildPush
+- stage: stage_build_push
   displayName: Build and push image
-  jobs:  
-  - template: templates/build.yml
-- stage: Deploy
+  jobs:
+  - job: job_build_push
+    displayName: Build and push image
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+    - task: Docker@2
+      displayName: Build and Push
+      inputs:
+        command: buildAndPush
+        containerRegistry: acr-service-connection-rh-gbb-cloud-native
+        repository: cosmocats
+        tags: |
+          $(AZDEV_BUILD_SOURCE_VERSION)
+- stage: stage_deploy
   displayName: Deploy to K8s
   jobs:
-  - template: templates/deploy.yml
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+    - template: templates/tokenize.yml
+    - template: templates/deploy.yml
