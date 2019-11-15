@@ -1,5 +1,17 @@
+# specific path build
 trigger:
-- master
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - /*
+    exclude:
+    - pipelines/*
+    - scripts/*
+    - README.md
+    - .gitignore
+    - vscode-defaults
 
 resources:
 - repo: self

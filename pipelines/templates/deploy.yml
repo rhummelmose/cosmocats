@@ -7,6 +7,5 @@ steps:
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
-      cat cosmocats/kubernetes/deployments.yml
       deployment_targets=$(bash aks-commander/scripts/deployment_targets_for_application.sh "$BUILD_REPOSITORY_URI")
       bash cosmocats/scripts/deploy_multiple.sh "$deployment_targets"
