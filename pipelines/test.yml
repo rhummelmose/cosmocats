@@ -6,6 +6,9 @@ resources:
     name: rhummelmose/aks-commander
     endpoint: rhummelmose
 
+variables:
+- group: cosmocats
+
 stages:
 - stage: Test
   displayName: Test
@@ -21,9 +24,24 @@ stages:
       displayName: Azure CLI
       inputs:
         azureSubscription: arm-service-connection-rh-subcription-vse-950dkk
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          latest_image_tag=$(az acr repository show-tags --name gbbcloudnative --repository cosmocats --orderby time_desc --top 1 --output tsv)
+          echo "##vso[task.setvariable variable=AZDEV_DEPLOYMENT_IMAGE_TAG]${latest_image_tag}"
+    - task: Bash@3
+      inputs:
+        filePath: cosmocats/scripts/tokenize.sh
+      env:
+        COSMOCATS_COSMOSDB_KEY: $(COSMOCATS_COSMOSDB_KEY)
+    - task: AzureCLI@2
+      displayName: Azure CLI
+      inputs:
+        azureSubscription: arm-service-connection-rh-subcription-vse-950dkk
         addSpnToEnvironment: true
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
-            deployment_targets=$(bash aks-commander/scripts/deployment_targets_for_application.sh "$BUILD_REPOSITORY_URI")
-            bash cosmocats/scripts/deploy_multiple.sh "$deployment_targets"
+          cat cosmocats/kubernetes/deployments.yml
+          deployment_targets=$(bash aks-commander/scripts/deployment_targets_for_application.sh "$BUILD_REPOSITORY_URI")
+          bash cosmocats/scripts/deploy_multiple.sh "$deployment_targets"

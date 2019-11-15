@@ -36,9 +36,7 @@ install_prereqs() {
 
 install_prereqs
 
-
 # Quote/escape functions for sed
-
 quoteRe() {
     sed -e 's/[^^]/[&]/g; s/\^/\\^/g; $!a\'$'\n''\\n' <<<"$1" | tr -d '\n';
 }
@@ -63,7 +61,10 @@ yq w --inplace kubernetes/secrets.yml "data.cosmos-db-key" "\"$(printf '%s' $COS
 
 # deployments.yml
 image_name=$(yq r kubernetes/deployments.yml "spec.template.spec.containers[0].image")
-image_tag="$AZDEV_BUILD_SOURCE_VERSION"
+image_tag=$BUILD_SOURCEVERSION
+if [ ! -z $AZDEV_DEPLOYMENT_IMAGE_TAG ]; then
+    image_name=$AZDEV_DEPLOYMENT_IMAGE_TAG
+fi
 container_image="${image_name}:${image_tag}"
 label_source_version="source_version"
 yq w --inplace kubernetes/deployments.yml "spec.template.spec.containers[0].image" "\"$container_image\""
