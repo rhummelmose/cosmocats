@@ -44,6 +44,6 @@ stages:
       vmImage: "ubuntu-latest"
     steps:
     - checkout: self
-      root: cosmocats
+      path: cosmocats
     - template: templates/tokenize.yml
     - template: templates/deploy.yml
