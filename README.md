@@ -8,6 +8,6 @@ cat@cosmos:~$ cd cosmocats
 cat@cosmos:~$ docker build . -t cosmocats:latest
 cat@cosmos:~$ docker run -p <YOUR LOCAL PORT>:80 -e "COSMOCATS_COSMOSDB_ENDPOINT=<YOUR ENDPOINT>" -e "COSMOCATS_COSMOSDB_KEY=<YOUR KEY>" cosmocats:latest
 ```
-Rejoice!
+Rejoice!!!
 ## Teaser
 ![Screenshot](https://raw.githubusercontent.com/rhummelmose/cosmocats/master/resources/screenshot.png)
