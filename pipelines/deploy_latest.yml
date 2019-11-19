@@ -1,12 +1,18 @@
 resources:
   repositories:
   - repository: self
-    trigger: none
+    trigger:
+      branches:
+        exclude:
+        - '*'
   - repository: aks-commander
     type: github
     name: rhummelmose/aks-commander
     endpoint: rhummelmose
-    trigger: none
+    trigger:
+      branches:
+        exclude:
+        - '*'
 
 variables:
 - group: cosmocats
