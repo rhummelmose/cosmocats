@@ -25,7 +25,7 @@ stages:
     - task: AzureCLI@2
       displayName: Get latest cosmocats image tag
       inputs:
-        azureSubscription: arm-service-connection-rh-subcription-vse-950dkk
+        azureSubscription: arm-service-connection-rahummel-subscription-microsoft-internal
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |

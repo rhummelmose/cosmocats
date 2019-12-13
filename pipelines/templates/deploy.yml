@@ -2,7 +2,7 @@ steps:
 - task: AzureCLI@2
   displayName: Deploy to all targets
   inputs:
-    azureSubscription: arm-service-connection-rh-subcription-vse-950dkk
+    azureSubscription: arm-service-connection-rahummel-subscription-microsoft-internal
     addSpnToEnvironment: true
     scriptType: bash
     scriptLocation: inlineScript
