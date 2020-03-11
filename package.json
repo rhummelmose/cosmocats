@@ -5,7 +5,9 @@
   "main": "src/main.ts",
   "module": "src/main.ts",
   "dependencies": {
-    "@azure/cosmos": "^3.4.1",
+    "@azure/cosmos": "^3.6.2",
+    "@azure/arm-cosmosdb": "^7.0.0",
+    "@azure/identity": "^1.0.2",
     "office-ui-fabric-react": "^7.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.11.0",

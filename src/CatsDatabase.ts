@@ -1,4 +1,4 @@
-import { CosmosClient, DatabaseResponse, DatabaseAccount, Database, Container, CosmosClientOptions } from "@azure/cosmos"
+import { CosmosClient, DatabaseResponse, DatabaseAccount, Database, Container, CosmosClientOptions } from "@azure/cosmos";
 
 import Cat from "./Cat";
 
@@ -8,24 +8,28 @@ export default class CatsDatabase {
     private database: Database | null;
     private container: Container | null;
 
-    constructor(endpoint: string, key: string) {
-        let cosmosClientOptions: CosmosClientOptions = {
-            endpoint: endpoint,
-            key: key,
-            connectionPolicy: {
-                enableEndpointDiscovery: false
-            }
+    constructor(connectionString: string)
+    constructor(endpoint: string, key: string)
+    constructor(connectionStringOrEndpoint?: string, key?: string) {
+        if (key == null) {
+            this.client = new CosmosClient(connectionStringOrEndpoint);
+        } else {
+            this.client = new CosmosClient({ endpoint: connectionStringOrEndpoint, key: key });
         }
-        this.client = new CosmosClient(cosmosClientOptions);
         this.database = null;
         this.container = null;
     }
 
     async bootstrap() {
-        let databaseResponse = await this.client.databases.createIfNotExists({id: "cosmocats"});
-        this.database = databaseResponse.database;
-        let containerResponse = await this.database.containers.createIfNotExists({id: "cosmocats"});
-        this.container = containerResponse.container;
+        try {
+            let databaseResponse = await this.client.databases.createIfNotExists({id: "cosmocats"});
+            this.database = databaseResponse.database;
+            let containerResponse = await this.database.containers.createIfNotExists({id: "cosmocats"});
+            this.container = containerResponse.container;
+        } catch (e) {
+            console.log(e);
+        }
+        
     }
 
     async allCats(): Promise<Cat[]> {

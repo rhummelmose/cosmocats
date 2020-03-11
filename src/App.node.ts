@@ -2,6 +2,8 @@ import * as Express from "express";
 import * as Path from "path";
 
 import Configuration from "./Configuration";
+import { CosmosAuthMechanism } from "./Configuration";
+import CosmosManagedIdentity from "./CosmosManagedIdentity"
 import CatsDatabase from "./CatsDatabase";
 import Cat from "./Cat";
 
@@ -13,7 +15,6 @@ export default class App {
 
     constructor(configuration: Configuration) {
         this.configuration = configuration;
-        this.catsDatabase = new CatsDatabase(this.configuration.cosmosEndpoint, this.configuration.cosmosKey);
         this.expressApp.get("/cats", this.getCats.bind(this));
         this.expressApp.post("/cats", this.postCats.bind(this));
         this.expressApp.use("/", Express.static(Path.join(__dirname, "./public")));
@@ -21,6 +22,17 @@ export default class App {
     }
 
     async start() {
+        switch
+         (this.configuration.cosmosAuthMechanism) {
+            case CosmosAuthMechanism.key:
+                this.catsDatabase = new CatsDatabase(this.configuration.cosmosEndpoint, this.configuration.cosmosKey);
+                break;
+            case CosmosAuthMechanism.managedIdentity:
+                let connectionString = await CosmosManagedIdentity.connectionStringForResourceId(this.configuration.cosmosResourceId);
+                console.log("Connection string: " + connectionString)
+                this.catsDatabase = new CatsDatabase(connectionString);
+                break;
+        }
         await this.catsDatabase.bootstrap();
         this.expressApp.listen(this.configuration.listeningPort);
     }

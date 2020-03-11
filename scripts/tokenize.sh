@@ -16,6 +16,12 @@ if [ -z $COSMOCATS_LISTENING_PORT ] || \
     exit 1
 fi
 
+# Allow for path to be passed
+path="$1"
+if [ -z "$path" ]; then
+    path="kubernetes"
+fi
+
 # Ensure portability
 tokenize_sh_script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -46,27 +52,27 @@ quoteSubst() {
 # yq w --inplace file.ext path.to.thing "$value"
 
 # configmaps.yml
-yq w --inplace "${tokenize_sh_script_path}/../kubernetes/configmaps.yml" "data.cosmos-db-endpoint" "\"$COSMOCATS_COSMOSDB_ENDPOINT\""
-yq w --inplace "${tokenize_sh_script_path}/../kubernetes/configmaps.yml" "data.listening-port" "\"$COSMOCATS_LISTENING_PORT\""
+yq w --inplace "${tokenize_sh_script_path}/../${path}/configmaps.yml" "data.cosmos-db-endpoint" "\"$COSMOCATS_COSMOSDB_ENDPOINT\""
+yq w --inplace "${tokenize_sh_script_path}/../${path}/configmaps.yml" "data.listening-port" "\"$COSMOCATS_LISTENING_PORT\""
 
 # secrets.yml
-yq w --inplace "${tokenize_sh_script_path}/../kubernetes/secrets.yml" "data.cosmos-db-key" "\"$(printf '%s' $COSMOCATS_COSMOSDB_KEY | base64)\""
+yq w --inplace "${tokenize_sh_script_path}/../${path}/secrets.yml" "data.cosmos-db-key" "\"$(printf '%s' $COSMOCATS_COSMOSDB_KEY | base64)\""
 
 # deployments.yml
-image_name=$(yq r "${tokenize_sh_script_path}/../kubernetes/deployments.yml" "spec.template.spec.containers[0].image")
+image_name=$(yq r "${tokenize_sh_script_path}/../${path}/deployments.yml" "spec.template.spec.containers[0].image")
 image_tag=$BUILD_SOURCEVERSION
 if [ ! -z $AZDEV_DEPLOYMENT_IMAGE_TAG ]; then
     image_tag=$AZDEV_DEPLOYMENT_IMAGE_TAG
 fi
 container_image="${image_name}:${image_tag}"
 label_source_version="source_version"
-yq w --inplace "${tokenize_sh_script_path}/../kubernetes/deployments.yml" "spec.template.spec.containers[0].image" "\"$container_image\""
-yq w --inplace "${tokenize_sh_script_path}/../kubernetes/deployments.yml" "spec.template.spec.containers[0].ports[0].containerPort" "$COSMOCATS_LISTENING_PORT"
-yq w --inplace "${tokenize_sh_script_path}/../kubernetes/deployments.yml" "metadata.labels[$label_source_version]" "\"$AZDEV_BUILD_SOURCE_VERSION\""
-yq w --inplace "${tokenize_sh_script_path}/../kubernetes/deployments.yml" "spec.template.metadata.labels[$label_source_version]" "\"$AZDEV_BUILD_SOURCE_VERSION\""
+yq w --inplace "${tokenize_sh_script_path}/../${path}/deployments.yml" "spec.template.spec.containers[0].image" "\"$container_image\""
+yq w --inplace "${tokenize_sh_script_path}/../${path}/deployments.yml" "spec.template.spec.containers[0].ports[0].containerPort" "$COSMOCATS_LISTENING_PORT"
+yq w --inplace "${tokenize_sh_script_path}/../${path}/deployments.yml" "metadata.labels[$label_source_version]" "\"$AZDEV_BUILD_SOURCE_VERSION\""
+yq w --inplace "${tokenize_sh_script_path}/../${path}/deployments.yml" "spec.template.metadata.labels[$label_source_version]" "\"$AZDEV_BUILD_SOURCE_VERSION\""
 
 # services.yml
-yq w --inplace "${tokenize_sh_script_path}/../kubernetes/services.yml" "spec.ports[0].port" $COSMOCATS_LISTENING_PORT
+yq w --inplace "${tokenize_sh_script_path}/../${path}/services.yml" "spec.ports[0].port" $COSMOCATS_LISTENING_PORT
 
 # ingresses.yml
-yq w --inplace "${tokenize_sh_script_path}/../kubernetes/ingresses.yml" "spec.rules[0].http.paths[0].backend.servicePort" "$COSMOCATS_LISTENING_PORT"
+yq w --inplace "${tokenize_sh_script_path}/../${path}/ingresses.yml" "spec.rules[0].http.paths[0].backend.servicePort" "$COSMOCATS_LISTENING_PORT"
